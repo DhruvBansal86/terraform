@@ -38,12 +38,13 @@ resource "aws_security_group" "private_machine" {
 
 resource "aws_instance" "PRIVATE_EC2" {
     ami = "${lookup(var.amis, var.aws_region)}"
-    availability_zone = "us-west-1a"
+    availability_zone = "us-west-1b"
     instance_type = "t2.micro"
     key_name = "terraform_keys"
     vpc_security_group_ids = ["${aws_security_group.private_machine.id}"]
-    subnet_id = "${aws_subnet.us-west-1a-private.id}"
+    subnet_id = "${aws_subnet.us-west-1b-private.id}"
     source_dest_check = false
+    user_data = "${file("./user-data-private.sh")}"
 
     tags {
         Name = "PRIVATE_EC2"
